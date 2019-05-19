@@ -33,4 +33,6 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 include vendor/du/support/common.mk
 include frameworks/base/packages/SettingsLib/common.mk
 
+include vendor/du/support/common.mk
+
 include $(BUILD_PACKAGE)

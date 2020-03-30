@@ -34,6 +34,7 @@
     <!-- Accent Picker -->
     <string name="theme_picker_default">Default</string>
     <string name="accent_color">Accent picker</string>
+    <string name="gradient_color">Gradient picker</string>
 
     <!-- Dark theme -->
     <string name="dark_theme_title">Dark theme</string>
@@ -84,7 +85,6 @@
     <string name="statusbar_icons_title">Statusbar/QS icons</string>
     <string name="statusbar_icons_dialog_title">Select statusbar icon set</string>
 
-<<<<<<< HEAD
     <!-- QS header style -->
     <string name="qs_header_style_default">Default</string>
     <string name="qs_header_style_grey">Grey</string>
@@ -106,33 +106,6 @@
     <string name="switch_stockish">Stockish</string>
     <string name="switch_style_dialog_title">Select switch style set</string>
 
-    <!-- Accents -->
-    <string name="accent_colors_space">Space</string>
-    <string name="accent_colors_purple">Purple</string>
-    <string name="accent_colors_orchid">Orchid</string>
-    <string name="accent_colors_ocean">Ocean</string>
-    <string name="accent_colors_green">Green</string>
-    <string name="accent_colors_cinnamon">Cinnamon</string>
-    <string name="accent_colors_amber">Amber</string>
-    <string name="accent_colors_blue">Blue</string>
-    <string name="accent_colors_bluegrey">Blue Grey</string>
-    <string name="accent_colors_brown">Brown</string>
-    <string name="accent_colors_cyan">Cyan</string>
-    <string name="accent_colors_deeporange">Deep Orange</string>
-    <string name="accent_colors_deeppurple">Deep Purple</string>
-    <string name="accent_colors_grey">Grey</string>
-    <string name="accent_colors_indigo">Indigo</string>
-    <string name="accent_colors_lightblue">Light Blue</string>
-    <string name="accent_colors_lightgreen">Light Green</string>
-    <string name="accent_colors_lime">Lime</string>
-    <string name="accent_colors_orange">Orange</string>
-    <string name="accent_colors_pink">Pink</string>
-    <string name="accent_colors_red">Red</string>
-    <string name="accent_colors_teal">Teal</string>
-    <string name="accent_colors_yellow">Yellow</string>
-
-=======
->>>>>>> 4bb9f19... Remove backup restore
     <!-- Themes -->
     <string name="theme_type_title">System theme</string>
     <string name="theme_type_summary">Select theme</string>

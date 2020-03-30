@@ -81,6 +81,7 @@ public class Themes extends PreferenceFragment {
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
     private static final String ACCENT_COLOR = "accent_color";
+    private static final String GRADIENT_COLOR = "gradient_color";
     static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private static boolean mUseSharedPrefListener;
@@ -100,6 +101,7 @@ public class Themes extends PreferenceFragment {
     private Preference mWpPreview;
 
     private ColorPickerPreference rgbAccentPicker;
+    private ColorPickerPreference rgbGradientPicker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -245,6 +247,36 @@ public class Themes extends PreferenceFragment {
                     int intHex = ColorPickerPreference.convertToColorInt(hex);
                     Settings.System.putIntForUser(getActivity().getContentResolver(),
                     Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
+                return true;
+                }
+            return false;
+            }
+       });
+
+        rgbGradientPicker = (ColorPickerPreference) findPreference(GRADIENT_COLOR);
+        int color = Settings.System.getIntForUser(getActivity().getContentResolver(),
+                Settings.System.GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+        String gradientHex = String.format("#%08x", (0xff1a73e8 & color));
+        if (gradientHex.equals("#ff1a73e8")) {
+            rgbGradientPicker.setSummary(R.string.theme_accent_picker_default);
+        } else {
+            rgbGradientPicker.setSummary(gradientHex);
+        }
+        rgbGradientPicker.setNewPreviewColor(color);
+        rgbGradientPicker.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+              if (preference == rgbGradientPicker) {
+                    String hex = ColorPickerPreference.convertToARGB(
+                            Integer.valueOf(String.valueOf(newValue)));
+                 if (hex.equals("#ff1a73e8")) {
+                    rgbGradientPicker.setSummary(R.string.theme_accent_picker_default);
+                 } else {
+                    rgbGradientPicker.setSummary(hex);
+                    }
+                    int intHex = ColorPickerPreference.convertToColorInt(hex);
+                    Settings.System.putIntForUser(getActivity().getContentResolver(),
+                    Settings.System.GRADIENT_COLOR, intHex, UserHandle.USER_CURRENT);
                 return true;
                 }
             return false;

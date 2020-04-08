@@ -39,9 +39,6 @@ import com.android.internal.util.du.ThemesUtils;
 public class AccentPicker extends DialogFragment {
 
     public static final String TAG_ACCENT_PICKER = "accent_picker";
-    private static final String ACCENT_COLOR = "accent_color";
-    private static final String GRADIENT_COLOR = "gradient_color";
-    static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private Context mContext;
     private SharedPreferences mSharedPreferences;

@@ -33,6 +33,7 @@ import android.app.FragmentManager;
 import android.app.UiModeManager;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.om.IOverlayManager;
@@ -46,6 +47,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -86,8 +88,8 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
-    private static final String PREF_RGB_ACCENT_PICKER = "rgb_accent_picker";
-    private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
+    private static final String ACCENT_COLOR = "accent_color";
+    static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private int mBackupLimit = 10;
     private static boolean mUseSharedPrefListener;
@@ -111,7 +113,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private Preference mThemeSchedule;
     private Preference mWpPreview;
 
-    private ColorPickerPreference rgbAccentPicker;
+    private ColorPickerPreference mAccentColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -330,28 +332,32 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     }
 
     private void setAccentPref() {
-        rgbAccentPicker = (ColorPickerPreference) findPreference(PREF_RGB_ACCENT_PICKER);
-        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-        int color = "-1".equals(colorVal)
-                ? Color.WHITE
-                : Color.parseColor("#" + colorVal);
-        rgbAccentPicker.setNewPreviewColor(color);
-        rgbAccentPicker.setOnPreferenceChangeListener(this);
+        mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
+        mAccentColor.setOnPreferenceChangeListener(this);
+        int intColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+        String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
+        if (hexColor.equals("#ff1a73e8")) {
+            mAccentColor.setSummary(R.string.theme_accent_picker_default);
+        } else {
+            mAccentColor.setSummary(hexColor);
+        }
+        mAccentColor.setNewPreviewColor(intColor);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == rgbAccentPicker) {
-            int color = (Integer) newValue;
-            String hexColor = String.format("%08X", (0xFFFFFFFF & color));
-            SystemProperties.set(ACCENT_COLOR_PROP, hexColor);
-            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
-            try {
-                 mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
-             } catch (RemoteException ignored) {
-             }
+        if (preference == mAccentColor) {
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
+            if (hex.equals("#ff1a73e8")) {
+                mAccentColor.setSummary(R.string.theme_accent_picker_default);
+            } else {
+                mAccentColor.setSummary(hex);
+            }
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
             return true;
         }
         return false;
@@ -438,7 +444,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
             }
 
             if (key.equals(PREF_THEME_ACCENT_COLOR)) {
-                SystemProperties.set(ACCENT_COLOR_PROP, "-1");
                 String accentColor = sharedPreferences.getString(PREF_THEME_ACCENT_COLOR, "default");
                 String overlayName = getOverlayName(ThemesUtils.ACCENTS);
                 if (overlayName != null) {
@@ -619,16 +624,11 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
 
     private void updateAccentSummary() {
         if (mAccentPicker != null) {
-            String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-            if ("-1".equals(colorVal)) {
-                int value = getOverlayPosition(ThemesUtils.ACCENTS);
-                if (value != -1) {
-                    mAccentPicker.setSummary(mAccentName[value]);
-                } else {
-                    mAccentPicker.setSummary(mContext.getString(R.string.theme_accent_picker_default));
-                }
+            int value = getOverlayPosition(ThemesUtils.ACCENTS);
+            if (value != -1) {
+                mAccentPicker.setSummary(mAccentName[value]);
             } else {
-                mAccentPicker.setSummary(colorVal);
+                mAccentPicker.setSummary(mContext.getString(R.string.theme_accent_picker_default));
             }
         }
     }

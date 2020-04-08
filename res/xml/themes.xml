@@ -25,7 +25,7 @@
         android:summary="@string/theme_accent_picker_summary" />
 
     <com.dirtyunicorns.support.colorpicker.ColorPickerPreference
-        android:key="rgb_accent_picker"
+        android:key="accent_color"
         android:title="@string/rgb_accent_picker_title"
         android:summary="@string/rgb_accent_picker_summary"
         android:persistent="false" />

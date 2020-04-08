@@ -89,6 +89,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
     private static final String ACCENT_COLOR = "accent_color";
+    private static final String GRADIENT_COLOR = "gradient_color";
     static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private int mBackupLimit = 10;
@@ -114,6 +115,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private Preference mWpPreview;
 
     private ColorPickerPreference mAccentColor;
+    private ColorPickerPreference mGradientColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -329,6 +331,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         updateBackupPref();
         updateRestorePref();
         setAccentPref();
+        setGradientPref();
     }
 
     private void setAccentPref() {
@@ -345,6 +348,20 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         mAccentColor.setNewPreviewColor(intColor);
     }
 
+    private void setGradientPref() {
+        mGradientColor = (ColorPickerPreference) findPreference(GRADIENT_COLOR);
+        mGradientColor.setOnPreferenceChangeListener(this);
+        int color = Settings.System.getIntForUser(getActivity().getContentResolver(),
+                Settings.System.GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+        String gradientHex = String.format("#%08x", (0xff1a73e8 & color));
+        if (gradientHex.equals("#ff1a73e8")) {
+            mGradientColor.setSummary(R.string.theme_accent_picker_default);
+        } else {
+            mGradientColor.setSummary(gradientHex);
+        }
+        mGradientColor.setNewPreviewColor(color);
+    }
+
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mAccentColor) {
@@ -358,6 +375,18 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putIntForUser(getActivity().getContentResolver(),
                     Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
+            return true;
+        } else if (preference == mGradientColor) {
+            String hex = ColorPickerPreference.convertToARGB(
+                    Integer.valueOf(String.valueOf(newValue)));
+            if (hex.equals("#ff1a73e8")) {
+                mGradientColor.setSummary(R.string.theme_accent_picker_default);
+            } else {
+                mGradientColor.setSummary(hex);
+            }
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putIntForUser(getActivity().getContentResolver(),
+                    Settings.System.GRADIENT_COLOR, intHex, UserHandle.USER_CURRENT);
             return true;
         }
         return false;

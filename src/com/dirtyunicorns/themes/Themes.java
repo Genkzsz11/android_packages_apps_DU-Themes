@@ -334,7 +334,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private void setAccentPref() {
         mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
         mAccentColor.setOnPreferenceChangeListener(this);
-        int intColor = Settings.System.getIntForUser(mContext.getContentResolver(),
+        int intColor = Settings.System.getIntForUser(getActivity().getContentResolver(),
                 Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
         String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
         if (hexColor.equals("#ff1a73e8")) {
@@ -356,7 +356,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
                 mAccentColor.setSummary(hex);
             }
             int intHex = ColorPickerPreference.convertToColorInt(hex);
-            Settings.System.putIntForUser(mContext.getContentResolver(),
+            Settings.System.putIntForUser(getActivity().getContentResolver(),
                     Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
             return true;
         }

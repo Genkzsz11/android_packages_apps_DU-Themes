@@ -340,11 +340,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         int intColor = Settings.System.getIntForUser(getActivity().getContentResolver(),
                 Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
         String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
-        if (hexColor.equals("#ff1a73e8")) {
-            mAccentColor.setSummary(R.string.theme_accent_picker_default);
-        } else {
-            mAccentColor.setSummary(hexColor);
-        }
         mAccentColor.setNewPreviewColor(intColor);
     }
 
@@ -354,11 +349,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         int color = Settings.System.getIntForUser(getActivity().getContentResolver(),
                 Settings.System.GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
         String gradientHex = String.format("#%08x", (0xff1a73e8 & color));
-        if (gradientHex.equals("#ff1a73e8")) {
-            mGradientColor.setSummary(R.string.theme_accent_picker_default);
-        } else {
-            mGradientColor.setSummary(gradientHex);
-        }
         mGradientColor.setNewPreviewColor(color);
     }
 
@@ -367,25 +357,16 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         if (preference == mAccentColor) {
             String hex = ColorPickerPreference.convertToARGB(
                     Integer.valueOf(String.valueOf(newValue)));
-            if (hex.equals("#ff1a73e8")) {
-                mAccentColor.setSummary(R.string.theme_accent_picker_default);
-            } else {
-                mAccentColor.setSummary(hex);
-            }
             int intHex = ColorPickerPreference.convertToColorInt(hex);
+            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
             Settings.System.putIntForUser(getActivity().getContentResolver(),
                     Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
-            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
             return true;
         } else if (preference == mGradientColor) {
             String hex = ColorPickerPreference.convertToARGB(
                     Integer.valueOf(String.valueOf(newValue)));
-            if (hex.equals("#ff1a73e8")) {
-                mGradientColor.setSummary(R.string.theme_accent_picker_default);
-            } else {
-                mGradientColor.setSummary(hex);
-            }
             int intHex = ColorPickerPreference.convertToColorInt(hex);
+            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
             Settings.System.putIntForUser(getActivity().getContentResolver(),
                     Settings.System.GRADIENT_COLOR, intHex, UserHandle.USER_CURRENT);
             return true;
@@ -475,7 +456,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
 
             if (key.equals(PREF_THEME_ACCENT_COLOR)) {
                 Settings.System.getIntForUser(getActivity().getContentResolver(),
-                     Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+                     Settings.System.ACCENT_COLOR, GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
                 String accentColor = sharedPreferences.getString(PREF_THEME_ACCENT_COLOR, "default");
                 String overlayName = getOverlayName(ThemesUtils.ACCENTS);
                 if (overlayName != null) {
@@ -657,7 +638,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private void updateAccentSummary() {
         if (mAccentPicker != null) {
             int intColor = Settings.System.getIntForUser(getActivity().getContentResolver(),
-                Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+                Settings.System.ACCENT_COLOR, GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
             String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
             if (hexColor.equals("#ff1a73e8")) {
                 int value = getOverlayPosition(ThemesUtils.ACCENTS);
@@ -667,7 +648,7 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
                     mAccentPicker.setSummary(mContext.getString(R.string.theme_accent_picker_default));
                 }
             } else {
-                mAccentPicker.setSummary(intColor);
+                mAccentPicker.setSummary(hexColor);
             }
         }
     }

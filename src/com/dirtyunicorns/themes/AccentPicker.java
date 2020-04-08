@@ -91,9 +91,8 @@ public class AccentPicker extends DialogFragment {
 
     private void initView() {
         int intColor = Settings.System.getIntForUser(getActivity().getContentResolver(),
-                Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
-        String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
-        if (hexColor.equals("#ff1a73e8")) {
+                Settings.System.ACCENT_COLOR, GRADIENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+        if (! "#ff1a73e8".equals(intColor)) {
             mSharedPreferencesEditor.remove("theme_accent_color");
             mSharedPreferencesEditor.apply();
         }

@@ -235,6 +235,7 @@ public class Themes extends PreferenceFragment implements SharedPreferences.OnSh
             mAccentColor.setSummary(hexColor);
         }
         mAccentColor.setNewPreviewColor(intColor);
+        mAccentColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
               if (preference == mAccentColor) {
@@ -264,6 +265,7 @@ public class Themes extends PreferenceFragment implements SharedPreferences.OnSh
             mGradientColor.setSummary(gradientHex);
         }
         mGradientColor.setNewPreviewColor(color);
+        mGradientColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
               if (preference == mGradientColor) {

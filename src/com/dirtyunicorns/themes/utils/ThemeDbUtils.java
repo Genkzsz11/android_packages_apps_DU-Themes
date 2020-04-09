@@ -21,7 +21,6 @@ public class ThemeDbUtils {
     private int mId;
     private String mThemeName;
     private String mThemeDayOrNight;
-    private String mThemeAccent;
     private String mThemeNightColor;
     private String mThemeSwitch;
     private String mAdaptativeIconShape;
@@ -35,13 +34,12 @@ public class ThemeDbUtils {
         //
     }
 
-    public ThemeDbUtils(int id, String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
+    public ThemeDbUtils(int id, String themeName, String themeDayOrNight, String themeNightColor,
                 String themeSwitch, String adaptativeIconShape, String themeFont,
                 String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mId = id;
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
-        mThemeAccent = themeAccent;
         mThemeNightColor = themeNightColor;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
@@ -52,12 +50,11 @@ public class ThemeDbUtils {
         mThemeNavbarStyle = themeNavbarStyle;
     }
 
-    public ThemeDbUtils(String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
+    public ThemeDbUtils(String themeName, String themeDayOrNight, String themeNightColor,
                 String themeSwitch, String adaptativeIconShape, String themeFont,
                 String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
-        mThemeAccent = themeAccent;
         mThemeNightColor = themeNightColor;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
@@ -90,14 +87,6 @@ public class ThemeDbUtils {
 
     public void setThemeDayOrNight(String themeDayOrNight) {
         mThemeDayOrNight = themeDayOrNight;
-    }
-
-    public String getThemeAccent() {
-        return mThemeAccent;
-    }
-
-    public void setThemeAccent(String themeAccent) {
-        mThemeAccent = themeAccent;
     }
 
     public String getThemeNightColor() {

@@ -62,7 +62,6 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.internal.util.du.ThemesUtils;
 import com.android.internal.util.du.Utils;
-import com.dirtyunicorns.themes.db.ThemeDatabase;
 
 import com.dirtyunicorns.support.colorpicker.ColorPickerPreference;
 
@@ -71,12 +70,10 @@ import java.util.Objects;
 
 import static com.dirtyunicorns.themes.utils.Utils.isLiveWallpaper;
 
-public class Themes extends PreferenceFragment implements ThemesListener, OnPreferenceChangeListener {
+public class Themes extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "Themes";
 
-    private static final String PREF_BACKUP_THEMES = "backup_themes";
-    private static final String PREF_RESTORE_THEMES = "restore_themes";
     private static final String PREF_WP_PREVIEW = "wp_preview";
     private static final String PREF_THEME_SCHEDULE = "theme_schedule";
     private static final String PREF_THEME_NAVBAR_PICKER = "theme_navbar_picker";
@@ -90,23 +87,19 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private static final String GRADIENT_COLOR = "gradient_color";
     static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
-    private int mBackupLimit = 10;
     private static boolean mUseSharedPrefListener;
     private String[] mNavbarName;
 
     private Context mContext;
     private IOverlayManager mOverlayManager;
     private SharedPreferences mSharedPreferences;
-    private ThemeDatabase mThemeDatabase;
     private UiModeManager mUiModeManager;
 
     private ListPreference mAdaptiveIconShape;
     private ListPreference mFontPicker;
     private ListPreference mStatusbarIcons;
     private ListPreference mThemeSwitch;
-    private Preference mBackupThemes;
     private Preference mNavbarPicker;
-    private Preference mRestoreThemes;
     private Preference mThemeSchedule;
     private Preference mWpPreview;
 
@@ -128,8 +121,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         }
 
         setHasOptionsMenu(true);
-
-        mThemeDatabase = new ThemeDatabase(mContext);
 
         // Shared preferences
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -178,66 +169,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         } else {
             prefSet.removePreference(mNavbarPicker);
         }
-
-        // Themes backup
-        mBackupThemes = (Preference) findPreference(PREF_BACKUP_THEMES);
-        assert mBackupThemes != null;
-        mBackupThemes.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (isLiveWallpaper(getActivity())) {
-                    new AlertDialog.Builder(getActivity(), R.style.AccentDialogTheme)
-                            .setTitle(getContext().getString(R.string.theme_backup_dialog_title))
-                            .setMessage(getContext().getString(R.string.theme_backup_dialog_message))
-                            .setCancelable(false)
-                            .setPositiveButton(getContext().getString(android.R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            FragmentManager manager = getFragmentManager();
-                                            Fragment frag = manager.findFragmentByTag(BackupThemes.TAG_BACKUP_THEMES);
-                                            if (frag != null) {
-                                                manager.beginTransaction().remove(frag).commit();
-                                            }
-                                            BackupThemes backupThemesFragment = new BackupThemes(Themes.this);
-                                            backupThemesFragment.show(manager, BackupThemes.TAG_BACKUP_THEMES);
-                                        }
-                                    })
-                            .setNegativeButton(getContext().getString(android.R.string.cancel),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-
-                } else {
-                    FragmentManager manager = getFragmentManager();
-                    Fragment frag = manager.findFragmentByTag(BackupThemes.TAG_BACKUP_THEMES);
-                    if (frag != null) {
-                        manager.beginTransaction().remove(frag).commit();
-                    }
-                    BackupThemes backupThemesFragment = new BackupThemes(Themes.this);
-                    backupThemesFragment.show(manager, BackupThemes.TAG_BACKUP_THEMES);
-                }
-                return true;
-            }
-        });
-
-        // Themes restore
-        mRestoreThemes = (Preference) findPreference(PREF_RESTORE_THEMES);
-        assert mRestoreThemes != null;
-        mRestoreThemes.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(mContext, RestoreThemes.class);
-                if (intent != null) {
-                    setSharedPrefListener(true);
-                    startActivity(intent);
-                }
-                return true;
-            }
-        });
 
         // Navbar
         String navbarName = getOverlayName(ThemesUtils.NAVBAR_STYLES);
@@ -297,8 +228,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         setWallpaperPreview();
         updateNavbarSummary();
         updateThemeScheduleSummary();
-        updateBackupPref();
-        updateRestorePref();
         setAccentPref();
         setGradientPref();
     }
@@ -365,29 +294,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         mWpPreview.setIcon(wallpaperDrawable);
-    }
-
-    private void updateBackupPref() {
-        mBackupThemes.setEnabled(getThemeCount() < mBackupLimit ? true : false);
-        if (getThemeCount() == mBackupLimit) {
-            mBackupThemes.setSummary(R.string.theme_backup_reach_limit_summary);
-        } else {
-            mBackupThemes.setSummary(R.string.theme_backup_summary);
-        }
-    }
-
-    private void updateRestorePref() {
-        mRestoreThemes.setEnabled(getThemeCount() > 0 ? true : false);
-        if (getThemeCount() == 0) {
-            mRestoreThemes.setSummary(R.string.theme_restore_no_backup_summary);
-        } else {
-            mRestoreThemes.setSummary(R.string.theme_restore_summary);
-        }
-    }
-
-    private int getThemeCount() {
-        int count = mThemeDatabase.getThemeDbUtilsCount();
-        return count;
     }
 
     private int getOverlayPosition(String[] overlays) {
@@ -562,18 +468,10 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     }
 
     @Override
-    public void onCloseBackupDialog(DialogFragment dialog) {
-        updateBackupPref();
-        updateRestorePref();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mSharedPrefListener);
         setWallpaperPreview();
-        updateBackupPref();
-        updateRestorePref();
         updateThemeScheduleSummary();
     }
 

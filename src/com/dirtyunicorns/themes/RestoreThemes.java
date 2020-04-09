@@ -387,7 +387,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
         for (ThemeDbUtils themes : themesDatabaseList) {
             String themeName = themes.getThemeName();
             String themeDayOrNight = themes.getThemeDayOrNight();
-            String themeAccent = themes.getThemeAccent();
             String themeNightColor = themes.getThemeNightColor();
             String themeSwitch = themes.getThemeSwitch();
             String adaptativeIconShape = themes.getAdaptiveIconShape();
@@ -397,7 +396,7 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
             String themeWp = themes.getThemeWp();
             String themeNavbarStyle = themes.getThemeNavbarStyle();
             mThemesList.add(new ThemesListItem(themeName, themeDayOrNight,
-                    themeAccent, themeNightColor, themeSwitch,
+                    themeNightColor, themeSwitch,
                     adaptativeIconShape, themeFont, themeIconShape, themeSbIcons,
                     themeWp, themeNavbarStyle));
         }
@@ -443,7 +442,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
                 }
                 mThemeDatabase.updateThemeDbUtils(new ThemeDbUtils(newThemeName,
                         mThemesList.get(getCurrentItem()).getThemeDayOrNight(),
-                        mThemesList.get(getCurrentItem()).getThemeAccent(),
                         mThemesList.get(getCurrentItem()).getThemeNightColor(),
                         mThemesList.get(getCurrentItem()).getThemeSwitch(),
                         mThemesList.get(getCurrentItem()).getAdaptiveIconShape(),

@@ -35,7 +35,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
     private static final String KEY_ID = "id";
     private static final String KEY_THEME_NAME = "themeName";
     private static final String KEY_THEME_DAY_NIGHT = "themeDayNight";
-    private static final String KEY_THEME_ACCENT = "themeAccent";
     private static final String KEY_THEME_NIGHT_COLOR = "themeNightColor";
     private static final String KEY_THEME_SWITCH = "themeSwitch";
     private static final String KEY_ADAPTATIVE_ICON_SHAPE = "adaptativeIconShape";
@@ -53,7 +52,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_THEME_TABLE = "CREATE TABLE " + THEME_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_THEME_NAME + " TEXT,"
-                + KEY_THEME_DAY_NIGHT + " TEXT," + KEY_THEME_ACCENT + " TEXT,"
+                + KEY_THEME_DAY_NIGHT + " TEXT,"
                 + KEY_THEME_NIGHT_COLOR + " TEXT,"
                 + KEY_THEME_SWITCH + " TEXT," + KEY_ADAPTATIVE_ICON_SHAPE + " TEXT,"
                 + KEY_THEME_FONT + " TEXT," + KEY_THEME_ICON_SHAPE + " TEXT,"
@@ -74,7 +73,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_THEME_NAME, themeDbUtils.getThemeName());
         values.put(KEY_THEME_DAY_NIGHT, themeDbUtils.getThemeDayOrNight());
-        values.put(KEY_THEME_ACCENT, themeDbUtils.getThemeAccent());
         values.put(KEY_THEME_NIGHT_COLOR, themeDbUtils.getThemeNightColor());
         values.put(KEY_THEME_SWITCH, themeDbUtils.getThemeSwitch());
         values.put(KEY_ADAPTATIVE_ICON_SHAPE, themeDbUtils.getAdaptiveIconShape());
@@ -107,8 +105,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 cursor.getString(3), cursor.getString(4),
                 cursor.getString(5), cursor.getString(6),
                 cursor.getString(7), cursor.getString(8),
-                cursor.getString(9), cursor.getString(10),
-                cursor.getString(11), cursor.getString(12));
+                cursor.getString(9), cursor.getString(10));
         cursor.close();
 
         return themeDbUtils;
@@ -127,15 +124,14 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 themeDbUtils.setID(Integer.parseInt(cursor.getString(0)));
                 themeDbUtils.setThemeName(cursor.getString(1));
                 themeDbUtils.setThemeDayOrNight(cursor.getString(2));
-                themeDbUtils.setThemeAccent(cursor.getString(3));
-                themeDbUtils.setThemeNightColor(cursor.getString(4));
-                themeDbUtils.setThemeSwitch(cursor.getString(5));
-                themeDbUtils.setAdaptiveIconShape(cursor.getString(6));
-                themeDbUtils.setThemeFont(cursor.getString(7));
-                themeDbUtils.setThemeIconShape(cursor.getString(8));
-                themeDbUtils.setThemeSbIcons(cursor.getString(9));
-                themeDbUtils.setThemeWp(cursor.getString(10));
-                themeDbUtils.setThemeNavbarStyle(cursor.getString(11));
+                themeDbUtils.setThemeNightColor(cursor.getString(3));
+                themeDbUtils.setThemeSwitch(cursor.getString(4));
+                themeDbUtils.setAdaptiveIconShape(cursor.getString(5));
+                themeDbUtils.setThemeFont(cursor.getString(6));
+                themeDbUtils.setThemeIconShape(cursor.getString(7));
+                themeDbUtils.setThemeSbIcons(cursor.getString(8));
+                themeDbUtils.setThemeWp(cursor.getString(9));
+                themeDbUtils.setThemeNavbarStyle(cursor.getString(1));
                 themeDbUtilsList.add(themeDbUtils);
             } while (cursor.moveToNext());
         }

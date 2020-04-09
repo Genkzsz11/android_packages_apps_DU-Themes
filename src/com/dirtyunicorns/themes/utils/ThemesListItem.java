@@ -20,7 +20,6 @@ public class ThemesListItem {
 
     private String mThemeName;
     private String mThemeDayOrNight;
-    private String mThemeAccent;
     private String mThemeNightColor;
     private String mThemeSwitch;
     private String mAdaptativeIconShape;
@@ -34,12 +33,11 @@ public class ThemesListItem {
         //
     }
 
-    public ThemesListItem(String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
+    public ThemesListItem(String themeName, String themeDayOrNight, String themeNightColor,
                 String themeSwitch, String adaptativeIconShape, String themeFont,
                 String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
-        mThemeAccent = themeAccent;
         mThemeNightColor = themeNightColor;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
@@ -64,14 +62,6 @@ public class ThemesListItem {
 
     public void setThemeDayOrNight(String themeDayOrNight) {
         mThemeDayOrNight = themeDayOrNight;
-    }
-
-    public String getThemeAccent() {
-        return mThemeAccent;
-    }
-
-    public void setThemeAccent(String themeAccent) {
-        mThemeAccent = themeAccent;
     }
 
     public String getThemeNightColor() {

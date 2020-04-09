@@ -267,19 +267,19 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 new ThemeWallpaper(viewHolderMain.mWpBgMain).execute();
                 viewHolderMain.mLlBgMain.setBackground(getThemeDayNightBg());
                 viewHolderMain.mQsAccentMainWifi.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderMain.mQSTileMainWifiActive.setColorFilter(qsTileIconActive);
                 viewHolderMain.mQsTileMainBgBluetoothInactive.setImageDrawable(
-                    getShapeDrawable(pathShape, qsTileBgInactive));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderMain.mQsTileMainIconBluetoothInactive.setColorFilter(qsTileIconInactive);
                 viewHolderMain.mQsAccentMainDnd.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderMain.mQsTileMainDndActive.setColorFilter(qsTileIconActive);
                 viewHolderMain.mQsTileMainBgFlashlightInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderMain.mQsTileMainIconFlashlightInactive.setColorFilter(qsTileIconInactive);
                 viewHolderMain.mQsAccentMainAutorotate.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderMain.mQsTileMainAutorotateActive.setColorFilter(qsTileIconActive);
                 viewHolderMain.mQsTileMainBgBatterySaverInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
@@ -300,19 +300,19 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 new ThemeWallpaper(viewHolderFilled.mWpBgFilled).execute();
                 viewHolderFilled.mLlBgMainFilled.setBackground(getThemeDayNightBg());
                 viewHolderFilled.mQsAccentMainFilledWifi.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderFilled.mQSTileMainFilledWifiActive.setColorFilter(qsTileIconActive);
                 viewHolderFilled.mQsTileMainFilledBgBluetoothInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderFilled.mQsTileMainFilledIconBluetoothInactive.setColorFilter(qsTileIconInactive);
                 viewHolderFilled.mQsAccentMainFilledDnd.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderFilled.mQsTileMainFilledDndActive.setColorFilter(qsTileIconActive);
                 viewHolderFilled.mQsTileMainFilledBgFlashlightInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderFilled.mQsTileMainFilledIconFlashlightInactive.setColorFilter(qsTileIconInactive);
                 viewHolderFilled.mQsAccentMainFilledAutorotate.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderFilled.mQsTileMainFilledAutorotateActive.setColorFilter(qsTileIconActive);
                 viewHolderFilled.mQsTileMainFilledBgBatterySaverInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
@@ -333,19 +333,19 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 new ThemeWallpaper(viewHolderRounded.mWpBgRounded).execute();
                 viewHolderRounded.mLlBgMainRounded.setBackground(getThemeDayNightBg());
                 viewHolderRounded.mQsAccentMainRoundedWifi.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderRounded.mQSTileMainRoundedWifiActive.setColorFilter(qsTileIconActive);
                 viewHolderRounded.mQsTileMainRoundedBgBluetoothInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderRounded.mQsTileMainRoundedIconBluetoothInactive.setColorFilter(qsTileIconInactive);
                 viewHolderRounded.mQsAccentMainRoundedDnd.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderRounded.mQsTileMainRoundedDndActive.setColorFilter(qsTileIconActive);
                 viewHolderRounded.mQsTileMainRoundedBgFlashlightInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderRounded.mQsTileMainRoundedIconFlashlightInactive.setColorFilter(qsTileIconInactive);
                 viewHolderRounded.mQsAccentMainRoundedAutorotate.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderRounded.mQsTileMainRoundedAutorotateActive.setColorFilter(qsTileIconActive);
                 viewHolderRounded.mQsTileMainRoundedBgBatterySaverInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
@@ -366,19 +366,19 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 new ThemeWallpaper(viewHolderCircular.mWpBgCircular).execute();
                 viewHolderCircular.mLlBgMainCircular.setBackground(getThemeDayNightBg());
                 viewHolderCircular.mQsAccentMainCircularWifi.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderCircular.mQSTileMainCircularWifiActive.setColorFilter(qsTileIconActive);
                 viewHolderCircular.mQsTileMainCircularBgBluetoothInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderCircular.mQsTileMainCircularIconBluetoothInactive.setColorFilter(qsTileIconInactive);
                 viewHolderCircular.mQsAccentMainCircularDnd.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderCircular.mQsTileMainCircularDndActive.setColorFilter(qsTileIconActive);
                 viewHolderCircular.mQsTileMainCircularBgFlashlightInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));
                 viewHolderCircular.mQsTileMainCircularIconFlashlightInactive.setColorFilter(qsTileIconInactive);
                 viewHolderCircular.mQsAccentMainCircularAutorotate.setImageDrawable(
-                    getShapeDrawable(pathShape, bgQsAccent));
+                    getShapeDrawable(pathShape, qsTileIconActive));
                 viewHolderCircular.mQsTileMainCircularAutorotateActive.setColorFilter(qsTileIconActive);
                 viewHolderCircular.mQsTileMainCircularBgBatterySaverInactive.setImageDrawable(
                     getShapeDrawable(pathShape, qsTileBgInactive));

@@ -90,7 +90,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(THEME_TABLE, new String[] {KEY_ID, KEY_THEME_NAME,
-                        KEY_THEME_DAY_NIGHT, KEY_THEME_ACCENT, KEY_THEME_NIGHT_COLOR,
+                        KEY_THEME_DAY_NIGHT, KEY_THEME_NIGHT_COLOR,
                         KEY_THEME_SWITCH, KEY_ADAPTATIVE_ICON_SHAPE,
                         KEY_THEME_FONT, KEY_THEME_ICON_SHAPE, KEY_THEME_SB_ICONS,
                         KEY_THEME_WP, KEY_THEME_NAVBAR_STYLE}, KEY_THEME_NAME + " = ?",
@@ -131,7 +131,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 themeDbUtils.setThemeIconShape(cursor.getString(7));
                 themeDbUtils.setThemeSbIcons(cursor.getString(8));
                 themeDbUtils.setThemeWp(cursor.getString(9));
-                themeDbUtils.setThemeNavbarStyle(cursor.getString(1));
+                themeDbUtils.setThemeNavbarStyle(cursor.getString(10));
                 themeDbUtilsList.add(themeDbUtils);
             } while (cursor.moveToNext());
         }
@@ -146,7 +146,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_THEME_NAME, themeDbUtils.getThemeName());
         values.put(KEY_THEME_DAY_NIGHT, themeDbUtils.getThemeDayOrNight());
-        values.put(KEY_THEME_ACCENT, themeDbUtils.getThemeAccent());
         values.put(KEY_THEME_NIGHT_COLOR, themeDbUtils.getThemeNightColor());
         values.put(KEY_THEME_SWITCH, themeDbUtils.getThemeSwitch());
         values.put(KEY_ADAPTATIVE_ICON_SHAPE, themeDbUtils.getAdaptiveIconShape());

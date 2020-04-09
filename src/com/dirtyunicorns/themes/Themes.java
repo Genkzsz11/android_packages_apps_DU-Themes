@@ -44,7 +44,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -81,8 +80,8 @@ public class Themes extends PreferenceFragment {
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
-    private static final String PREF_RGB_ACCENT_PICKER = "rgb_accent_picker";
-    private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
+    private static final String ACCENT_COLOR = "accent_color";
+    static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private static boolean mUseSharedPrefListener;
     private String[] mNavbarName;
@@ -221,38 +220,40 @@ public class Themes extends PreferenceFragment {
         }
         mStatusbarIcons.setSummary(mStatusbarIcons.getEntry());
 
+        // RGB Accent
+        rgbAccentPicker = (ColorPickerPreference) findPreference(ACCENT_COLOR);
+        int intColor = Settings.System.getIntForUser(getActivity().getContentResolver(),
+                Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
+        String hexColor = String.format("#%08x", (0xff1a73e8 & intColor));
+        if (hexColor.equals("#ff1a73e8")) {
+            rgbAccentPicker.setSummary(R.string.theme_accent_picker_default);
+        } else {
+            rgbAccentPicker.setSummary(hexColor);
+        }
+        rgbAccentPicker.setNewPreviewColor(intColor);
+        rgbAccentPicker.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+              if (preference == rgbAccentPicker) {
+                    String hex = ColorPickerPreference.convertToARGB(
+                            Integer.valueOf(String.valueOf(newValue)));
+                    if (hex.equals("#ff1a73e8")) {
+                        rgbAccentPicker.setSummary(R.string.theme_accent_picker_default);
+                    } else {
+                        rgbAccentPicker.setSummary(hex);
+                    }
+                    int intHex = ColorPickerPreference.convertToColorInt(hex);
+                    Settings.System.putIntForUser(getActivity().getContentResolver(),
+                    Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
+                return true;
+                }
+            return false;
+            }
+       });
+
         setWallpaperPreview();
-        setAccentPref();
         updateNavbarSummary();
         updateThemeScheduleSummary();
-    }
-
-    private void setAccentPref() {
-        rgbAccentPicker = (ColorPickerPreference) findPreference(PREF_RGB_ACCENT_PICKER);
-        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-        int color = "-1".equals(colorVal)
-                ? Color.WHITE
-                : Color.parseColor("#" + colorVal);
-        rgbAccentPicker.setNewPreviewColor(color);
-        rgbAccentPicker.setOnPreferenceChangeListener(this);
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == rgbAccentPicker) {
-            int color = (Integer) newValue;
-            String hexColor = String.format("%08X", (0xFFFFFFFF & color));
-            SystemProperties.set(ACCENT_COLOR_PROP, hexColor);
-            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
-            try {
-                 mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
-             } catch (RemoteException ignored) {
-             }
-            return true;
-        }
-        return false;
     }
 
     private void setWallpaperPreview() {

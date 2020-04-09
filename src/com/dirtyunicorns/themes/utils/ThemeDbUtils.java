@@ -23,7 +23,6 @@ public class ThemeDbUtils {
     private String mThemeDayOrNight;
     private String mThemeAccent;
     private String mThemeNightColor;
-    private String mAccentPicker;
     private String mThemeSwitch;
     private String mAdaptativeIconShape;
     private String mThemeFont;
@@ -37,14 +36,13 @@ public class ThemeDbUtils {
     }
 
     public ThemeDbUtils(int id, String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
-                String accentPicker, String themeSwitch, String adaptativeIconShape, String themeFont,
+                String themeSwitch, String adaptativeIconShape, String themeFont,
                 String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mId = id;
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
         mThemeAccent = themeAccent;
         mThemeNightColor = themeNightColor;
-        mAccentPicker = accentPicker;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
         mThemeFont = themeFont;
@@ -55,13 +53,12 @@ public class ThemeDbUtils {
     }
 
     public ThemeDbUtils(String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
-                String accentPicker, String themeSwitch, String adaptativeIconShape, String themeFont,
+                String themeSwitch, String adaptativeIconShape, String themeFont,
                 String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
         mThemeAccent = themeAccent;
         mThemeNightColor = themeNightColor;
-        mAccentPicker = accentPicker;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
         mThemeFont = themeFont;
@@ -109,14 +106,6 @@ public class ThemeDbUtils {
 
     public void setThemeNightColor(String themeNightColor) {
         mThemeNightColor = themeNightColor;
-    }
-
-    public String getAccentPicker() {
-        return mAccentPicker;
-    }
-
-    public void setAccentPicker(String accentPicker) {
-        mAccentPicker = accentPicker;
     }
 
     public String getThemeSwitch() {

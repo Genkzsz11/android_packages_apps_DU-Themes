@@ -201,7 +201,7 @@ public class BackupThemes extends DialogFragment {
 
     private void addThemeBackup() {
         mThemeDatabase.addThemeDbUtils(new ThemeDbUtils(mThemeName, isDarkMode(),
-            getIconsAccentColor(), getThemeNightColor(), getAccentPicker(),
+            getIconsAccentColor(), getThemeNightColor(),
             getThemeSwitch(), getAdaptiveIconShape(), getFont(), getIconsShape(),
             getSbIcons(), getThemeWp(), getNavbarStyle()));
     }
@@ -269,11 +269,6 @@ public class BackupThemes extends DialogFragment {
         String iconsShape = getActivity().getString(
                     com.android.internal.R.string.config_icon_mask);
         return iconsShape;
-    }
-
-    private String getAccentPicker() {
-        String accentPicker = mSharedPreferences.getString("theme_accent_color", "default");
-        return accentPicker;
     }
 
     private String getThemeSwitch() {

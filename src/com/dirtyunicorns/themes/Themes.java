@@ -70,7 +70,7 @@ import java.util.Objects;
 
 import static com.dirtyunicorns.themes.utils.Utils.isLiveWallpaper;
 
-public class Themes extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class Themes extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, OnPreferenceChangeListener {
 
     private static final String TAG = "Themes";
 

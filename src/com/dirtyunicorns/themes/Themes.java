@@ -224,9 +224,10 @@ public class Themes extends PreferenceFragment {
 
         // RGB
         mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
-        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-        int color = Settings.Secure.getInt(getActivity().getContentResolver(),
-                Settings.Secure.ACCENT_COLOR, "-1", false);
+        String color = Settings.Secure.getStringForUser(getActivity().getContentResolver(),
+                Settings.Secure.ACCENT_COLOR, 0);
+        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, color);
+        int color = Color.parseColor("0xff1a73e8" + colorVal);
         mAccentColor.setNewPreviewColor(color);
         mAccentColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -236,7 +237,7 @@ public class Themes extends PreferenceFragment {
                           Integer.valueOf(String.valueOf(newValue)));
                     int intHex = ColorPickerPreference.convertToColorInt(hex);
                     SystemProperties.set(ACCENT_COLOR_PROP, hex);
-                    Settings.Secure.putInt(getActivity().getContentResolver(),
+                    Settings.Secure.putStringForUser(getActivity().getContentResolver(),
                          Settings.Secure.ACCENT_COLOR, intHex);
                     preference.setSummary(intHex);
                 try {
@@ -252,29 +253,8 @@ public class Themes extends PreferenceFragment {
        });
 
         setWallpaperPreview();
-        setAccentPref();
         updateNavbarSummary();
         updateThemeScheduleSummary();
-    }
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mAccentColor) {
-            String hex = ColorPickerPreference.convertToARGB(
-                  Integer.valueOf(String.valueOf(newValue)));
-            int intHex = ColorPickerPreference.convertToColorInt(hex);
-            SystemProperties.set(ACCENT_COLOR_PROP, hex);
-            Settings.Secure.putInt(getActivity().getContentResolver(),
-                    Settings.Secure.ACCENT_COLOR, intHex);
-            try {
-                 mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
-                 mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
-             } catch (RemoteException ignored) {
-             }
-            return true;
-        }
-        return false;
     }
 
     private void setWallpaperPreview() {

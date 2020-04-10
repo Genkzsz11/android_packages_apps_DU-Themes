@@ -46,6 +46,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,7 +82,7 @@ public class Themes extends PreferenceFragment {
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
-    private static final String PREF_RGB_ACCENT_PICKER = "rgb_accent_picker";
+    private static final String ACCENT_COLOR = "rgb_accent_picker";
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
 
     private static boolean mUseSharedPrefListener;
@@ -100,7 +101,7 @@ public class Themes extends PreferenceFragment {
     private Preference mThemeSchedule;
     private Preference mWpPreview;
 
-    private ColorPickerPreference rgbAccentPicker;
+    private ColorPickerPreference mAccentColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,29 +222,50 @@ public class Themes extends PreferenceFragment {
         }
         mStatusbarIcons.setSummary(mStatusbarIcons.getEntry());
 
+        // RGB
+        mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
+        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
+        int color = Settings.Secure.getInt(getActivity().getContentResolver(),
+                Settings.Secure.ACCENT_COLOR, "-1", false);
+        mAccentColor.setNewPreviewColor(color);
+        mAccentColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+              if (preference == mAccentColor) {
+                    String hex = ColorPickerPreference.convertToARGB(
+                          Integer.valueOf(String.valueOf(newValue)));
+                    int intHex = ColorPickerPreference.convertToColorInt(hex);
+                    SystemProperties.set(ACCENT_COLOR_PROP, hex);
+                    Settings.Secure.putInt(getActivity().getContentResolver(),
+                         Settings.Secure.ACCENT_COLOR, intHex);
+                    preference.setSummary(intHex);
+                try {
+                     mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
+                     mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
+                     mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
+                 } catch (RemoteException ignored) {
+                 }
+                return true;
+              }
+            return false;
+            }
+       });
+
         setWallpaperPreview();
         setAccentPref();
         updateNavbarSummary();
         updateThemeScheduleSummary();
     }
 
-    private void setAccentPref() {
-        rgbAccentPicker = (ColorPickerPreference) findPreference(PREF_RGB_ACCENT_PICKER);
-        String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-        int color = "-1".equals(colorVal)
-                ? Color.WHITE
-                : Color.parseColor("#" + colorVal);
-        rgbAccentPicker.setNewPreviewColor(color);
-        rgbAccentPicker.setOnPreferenceChangeListener(this);
-    }
-
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == rgbAccentPicker) {
-            int color = (Integer) newValue;
-            String hexColor = String.format("%08X", (0xFFFFFFFF & color));
-            SystemProperties.set(ACCENT_COLOR_PROP, hexColor);
-            mSharedPreferences.edit().remove(PREF_THEME_ACCENT_COLOR);
+        if (preference == mAccentColor) {
+            String hex = ColorPickerPreference.convertToARGB(
+                  Integer.valueOf(String.valueOf(newValue)));
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            SystemProperties.set(ACCENT_COLOR_PROP, hex);
+            Settings.Secure.putInt(getActivity().getContentResolver(),
+                    Settings.Secure.ACCENT_COLOR, intHex);
             try {
                  mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
                  mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);

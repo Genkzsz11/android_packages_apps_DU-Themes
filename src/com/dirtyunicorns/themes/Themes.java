@@ -82,8 +82,8 @@ public class Themes extends PreferenceFragment {
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
-    private static final String ACCENT_COLOR = "rgb_accent_picker";
-    private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
+    private static final String ACCENT_COLOR = "accent_color";
+    static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
 
     private static boolean mUseSharedPrefListener;
     private String[] mNavbarName;
@@ -224,33 +224,34 @@ public class Themes extends PreferenceFragment {
 
         // RGB
         mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
-        int color = Settings.Secure.getIntForUser(resolver,
-                Settings.Secure.ACCENT_COLOR, UserHandle.USER_CURRENT);
+        int color = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
         String colorHex = String.format("#%08x", (0xff1a73e8 & color));
         if (colorHex.equals("#ff1a73e8")) {
             mAccentColor.setSummary(R.string.theme_accent_picker_default);
         } else {
             mAccentColor.setSummary(colorHex);
         }
-        mAccentColor.setNewPreviewColor(colorHex);
+        mAccentColor.setNewPreviewColor(color);
         mAccentColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
               if (preference == mAccentColor) {
                     String hex = ColorPickerPreference.convertToARGB(
                          Integer.valueOf(String.valueOf(newValue)));
-                    int intHex = ColorPickerPreference.convertToColorInt(hex);
                 if (hex.equals("#ff1a73e8")) {
-                    mAccentColor.setSummary(R.string.default_string);
+                    mAccentColor.setSummary(R.string.theme_accent_picker_default);
                 } else {
                     mAccentColor.setSummary(hex);
                 }
-                    Settings.Secure.putString(getContext().getContentResolver(),
-                         Settings.Secure.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
-                   return true;
+                    int intHex = ColorPickerPreference.convertToColorInt(hex);
+                    Settings.System.putIntForUser(getContext().getContentResolver(),
+                         Settings.System.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
+                    return true;
                 }
-              return false;
-          });
+                return false;
+            }
+       });
 
         setWallpaperPreview();
         updateNavbarSummary();

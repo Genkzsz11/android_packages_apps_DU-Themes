@@ -247,17 +247,10 @@ public class Themes extends PreferenceFragment {
                 }
                     Settings.Secure.putString(getContext().getContentResolver(),
                          Settings.Secure.ACCENT_COLOR, intHex, UserHandle.USER_CURRENT);
-                try {
-                     mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
-                     mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);
-                     mOverlayManager.reloadAssets("com.android.systemui", UserHandle.USER_CURRENT);
-                 } catch (RemoteException ignored) {
-                 }
-                return true;
-              }
-            return false;
-            }
-       });
+                   return true;
+                }
+              return false;
+          });
 
         setWallpaperPreview();
         updateNavbarSummary();

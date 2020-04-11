@@ -60,7 +60,6 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.internal.util.du.ThemesUtils;
 import com.android.internal.util.du.Utils;
-import com.dirtyunicorns.themes.db.ThemeDatabase;
 
 import com.dirtyunicorns.support.colorpicker.ColorPickerPreference;
 
@@ -69,18 +68,14 @@ import java.util.Objects;
 
 import static com.dirtyunicorns.themes.utils.Utils.isLiveWallpaper;
 
-public class Themes extends PreferenceFragment implements ThemesListener, OnPreferenceChangeListener {
+public class Themes extends PreferenceFragment {
 
     private static final String TAG = "Themes";
 
-    private static final String PREF_BACKUP_THEMES = "backup_themes";
-    private static final String PREF_RESTORE_THEMES = "restore_themes";
     private static final String PREF_WP_PREVIEW = "wp_preview";
     private static final String PREF_THEME_SCHEDULE = "theme_schedule";
-    private static final String PREF_THEME_ACCENT_PICKER = "theme_accent_picker";
     private static final String PREF_THEME_NAVBAR_PICKER = "theme_navbar_picker";
     public static final String PREF_THEME_NAVBAR_STYLE = "theme_navbar_style";
-    public static final String PREF_THEME_ACCENT_COLOR = "theme_accent_color";
     public static final String PREF_ADAPTIVE_ICON_SHAPE = "adapative_icon_shape";
     public static final String PREF_FONT_PICKER = "font_picker";
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
@@ -89,25 +84,19 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     private static final String PREF_RGB_ACCENT_PICKER = "rgb_accent_picker";
     private static final String ACCENT_COLOR_PROP = "persist.sys.theme.accentcolor";
 
-    private int mBackupLimit = 10;
     private static boolean mUseSharedPrefListener;
-    private String[] mAccentName;
     private String[] mNavbarName;
 
     private Context mContext;
     private IOverlayManager mOverlayManager;
     private SharedPreferences mSharedPreferences;
-    private ThemeDatabase mThemeDatabase;
     private UiModeManager mUiModeManager;
 
     private ListPreference mAdaptiveIconShape;
     private ListPreference mFontPicker;
     private ListPreference mStatusbarIcons;
     private ListPreference mThemeSwitch;
-    private Preference mAccentPicker;
-    private Preference mBackupThemes;
     private Preference mNavbarPicker;
-    private Preference mRestoreThemes;
     private Preference mThemeSchedule;
     private Preference mWpPreview;
 
@@ -129,8 +118,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
 
         setHasOptionsMenu(true);
 
-        mThemeDatabase = new ThemeDatabase(mContext);
-
         // Shared preferences
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mSharedPrefListener);
@@ -139,9 +126,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         mUiModeManager = getContext().getSystemService(UiModeManager.class);
         mOverlayManager = IOverlayManager.Stub.asInterface(
                 ServiceManager.getService(Context.OVERLAY_SERVICE));
-
-        // Accent summary
-        mAccentName = getResources().getStringArray(R.array.accent_name);
 
         // Navbar summary
         mNavbarName = getResources().getStringArray(R.array.navbar_name);
@@ -157,23 +141,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), Schedule.class);
                 startActivity(intent);
-                return true;
-            }
-        });
-
-        // Accent picker
-        mAccentPicker = (Preference) findPreference(PREF_THEME_ACCENT_PICKER);
-        assert mAccentPicker != null;
-        mAccentPicker.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                FragmentManager manager = getFragmentManager();
-                Fragment frag = manager.findFragmentByTag(AccentPicker.TAG_ACCENT_PICKER);
-                if (frag != null) {
-                    manager.beginTransaction().remove(frag).commit();
-                }
-                AccentPicker accentPickerFragment = new AccentPicker();
-                accentPickerFragment.show(manager, AccentPicker.TAG_ACCENT_PICKER);
                 return true;
             }
         });
@@ -197,72 +164,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
             });
         } else {
             prefSet.removePreference(mNavbarPicker);
-        }
-
-        // Themes backup
-        mBackupThemes = (Preference) findPreference(PREF_BACKUP_THEMES);
-        assert mBackupThemes != null;
-        mBackupThemes.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                if (isLiveWallpaper(getActivity())) {
-                    new AlertDialog.Builder(getActivity(), R.style.AccentDialogTheme)
-                            .setTitle(getContext().getString(R.string.theme_backup_dialog_title))
-                            .setMessage(getContext().getString(R.string.theme_backup_dialog_message))
-                            .setCancelable(false)
-                            .setPositiveButton(getContext().getString(android.R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            FragmentManager manager = getFragmentManager();
-                                            Fragment frag = manager.findFragmentByTag(BackupThemes.TAG_BACKUP_THEMES);
-                                            if (frag != null) {
-                                                manager.beginTransaction().remove(frag).commit();
-                                            }
-                                            BackupThemes backupThemesFragment = new BackupThemes(Themes.this);
-                                            backupThemesFragment.show(manager, BackupThemes.TAG_BACKUP_THEMES);
-                                        }
-                                    })
-                            .setNegativeButton(getContext().getString(android.R.string.cancel),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-
-                } else {
-                    FragmentManager manager = getFragmentManager();
-                    Fragment frag = manager.findFragmentByTag(BackupThemes.TAG_BACKUP_THEMES);
-                    if (frag != null) {
-                        manager.beginTransaction().remove(frag).commit();
-                    }
-                    BackupThemes backupThemesFragment = new BackupThemes(Themes.this);
-                    backupThemesFragment.show(manager, BackupThemes.TAG_BACKUP_THEMES);
-                }
-                return true;
-            }
-        });
-
-        // Themes restore
-        mRestoreThemes = (Preference) findPreference(PREF_RESTORE_THEMES);
-        assert mRestoreThemes != null;
-        mRestoreThemes.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(mContext, RestoreThemes.class);
-                if (intent != null) {
-                    setSharedPrefListener(true);
-                    startActivity(intent);
-                }
-                return true;
-            }
-        });
-
-        // Accent
-        String accentName = getOverlayName(ThemesUtils.ACCENTS);
-        if (accentName != null) {
-            mSharedPreferences.edit().putString("theme_accent_color", accentName).apply();
         }
 
         // Navbar
@@ -321,12 +222,9 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         mStatusbarIcons.setSummary(mStatusbarIcons.getEntry());
 
         setWallpaperPreview();
-        updateAccentSummary();
+        setAccentPref();
         updateNavbarSummary();
         updateThemeScheduleSummary();
-        updateBackupPref();
-        updateRestorePref();
-        setAccentPref();
     }
 
     private void setAccentPref() {
@@ -361,29 +259,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(getActivity());
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         mWpPreview.setIcon(wallpaperDrawable);
-    }
-
-    private void updateBackupPref() {
-        mBackupThemes.setEnabled(getThemeCount() < mBackupLimit ? true : false);
-        if (getThemeCount() == mBackupLimit) {
-            mBackupThemes.setSummary(R.string.theme_backup_reach_limit_summary);
-        } else {
-            mBackupThemes.setSummary(R.string.theme_backup_summary);
-        }
-    }
-
-    private void updateRestorePref() {
-        mRestoreThemes.setEnabled(getThemeCount() > 0 ? true : false);
-        if (getThemeCount() == 0) {
-            mRestoreThemes.setSummary(R.string.theme_restore_no_backup_summary);
-        } else {
-            mRestoreThemes.setSummary(R.string.theme_restore_summary);
-        }
-    }
-
-    private int getThemeCount() {
-        int count = mThemeDatabase.getThemeDbUtilsCount();
-        return count;
     }
 
     private int getOverlayPosition(String[] overlays) {
@@ -435,19 +310,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
                     }
                     mFontPicker.setSummary(mFontPicker.getEntry());
                 }
-            }
-
-            if (key.equals(PREF_THEME_ACCENT_COLOR)) {
-                SystemProperties.set(ACCENT_COLOR_PROP, "-1");
-                String accentColor = sharedPreferences.getString(PREF_THEME_ACCENT_COLOR, "default");
-                String overlayName = getOverlayName(ThemesUtils.ACCENTS);
-                if (overlayName != null) {
-                    handleOverlays(overlayName, false, mOverlayManager);
-                }
-                if (accentColor != "default") {
-                    handleOverlays(accentColor, true, mOverlayManager);
-                }
-                updateAccentSummary();
             }
 
             if (key.equals(PREF_THEME_NAVBAR_STYLE)) {
@@ -571,18 +433,10 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
     }
 
     @Override
-    public void onCloseBackupDialog(DialogFragment dialog) {
-        updateBackupPref();
-        updateRestorePref();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         mSharedPreferences.registerOnSharedPreferenceChangeListener(mSharedPrefListener);
         setWallpaperPreview();
-        updateBackupPref();
-        updateRestorePref();
         updateThemeScheduleSummary();
     }
 
@@ -613,22 +467,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
                     mThemeSchedule.setSummary(getScheduledStartThemeSummary(mSharedPreferences, mContext)
                             + " " + mContext.getString(R.string.theme_schedule_dyn_summary));
                 }
-            }
-        }
-    }
-
-    private void updateAccentSummary() {
-        if (mAccentPicker != null) {
-            String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, "-1");
-            if ("-1".equals(colorVal)) {
-                int value = getOverlayPosition(ThemesUtils.ACCENTS);
-                if (value != -1) {
-                    mAccentPicker.setSummary(mAccentName[value]);
-                } else {
-                    mAccentPicker.setSummary(mContext.getString(R.string.theme_accent_picker_default));
-                }
-            } else {
-                mAccentPicker.setSummary(colorVal);
             }
         }
     }
@@ -689,8 +527,6 @@ public class Themes extends PreferenceFragment implements ThemesListener, OnPref
 
         protected Void doInBackground(Void... param) {
             mSharedPreferences.edit()
-            // Accents
-            .remove(PREF_THEME_ACCENT_COLOR)
             // NavBar
             .remove(PREF_THEME_NAVBAR_STYLE)
             // Fonts

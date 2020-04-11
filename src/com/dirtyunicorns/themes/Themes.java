@@ -224,22 +224,20 @@ public class Themes extends PreferenceFragment {
 
         // RGB
         mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
-        String color = Settings.Secure.getStringForUser(getActivity().getContentResolver(),
+        String color = Settings.Secure.getStringForUser(getContext().getContentResolver(),
                 Settings.Secure.ACCENT_COLOR, 0);
         String colorVal = SystemProperties.get(ACCENT_COLOR_PROP, color);
-        int color = Color.parseColor("0xff1a73e8" + colorVal);
-        mAccentColor.setNewPreviewColor(color);
+        int colorHex = Color.parseColor("0xff1a73e8" + colorVal);
+        mAccentColor.setNewPreviewColor(colorHex);
         mAccentColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
               if (preference == mAccentColor) {
-                    String hex = ColorPickerPreference.convertToARGB(
-                          Integer.valueOf(String.valueOf(newValue)));
-                    int intHex = ColorPickerPreference.convertToColorInt(hex);
-                    SystemProperties.set(ACCENT_COLOR_PROP, hex);
-                    Settings.Secure.putStringForUser(getActivity().getContentResolver(),
-                         Settings.Secure.ACCENT_COLOR, intHex);
-                    preference.setSummary(intHex);
+            int color = (Integer) newValue;
+                    String hexColor = String.format("%08X", (0xFFFFFFFF & color));
+                    SystemProperties.set(ACCENT_COLOR_PROP, hexColor);
+                    Settings.Secure.putString(getContext().getContentResolver(),
+                         Settings.Secure.ACCENT_COLOR, ACCENT_COLOR_PROP);
                 try {
                      mOverlayManager.reloadAndroidAssets(UserHandle.USER_CURRENT);
                      mOverlayManager.reloadAssets("com.android.settings", UserHandle.USER_CURRENT);

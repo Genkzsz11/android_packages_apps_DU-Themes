@@ -83,7 +83,7 @@ public class Themes extends PreferenceFragment {
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
     private static final String ACCENT_COLOR = "accent_color";
-    static final int DEFAULT_ACCENT_COLOR = 0xff1a73e8;
+    static final int DEFAULT_ACCENT_COLOR = 0x7f07012c;
 
     private static boolean mUseSharedPrefListener;
     private String[] mNavbarName;
@@ -226,8 +226,8 @@ public class Themes extends PreferenceFragment {
         mAccentColor = (ColorPickerPreference) findPreference(ACCENT_COLOR);
         int color = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.ACCENT_COLOR, DEFAULT_ACCENT_COLOR, UserHandle.USER_CURRENT);
-        String colorHex = String.format("#%08x", (0xff1a73e8 & color));
-        if (colorHex.equals("#ff1a73e8")) {
+        String colorHex = String.format("#%08x", (0x7f07012c & color));
+        if (colorHex.equals("#7f07012c")) {
             mAccentColor.setSummary(R.string.theme_accent_picker_default);
         } else {
             mAccentColor.setSummary(colorHex);
@@ -239,7 +239,7 @@ public class Themes extends PreferenceFragment {
                if (preference == mAccentColor) {
                      String hex = ColorPickerPreference.convertToARGB(
                           Integer.valueOf(String.valueOf(newValue)));
-                 if (hex.equals("#ff1a73e8")) {
+                 if (hex.equals("#7f07012c")) {
                      mAccentColor.setSummary(R.string.theme_accent_picker_default);
                  } else {
                      mAccentColor.setSummary(hex);

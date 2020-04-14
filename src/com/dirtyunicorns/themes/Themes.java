@@ -258,11 +258,12 @@ public class Themes extends PreferenceFragment {
         });
 
         mQsPanelColor = (ColorPickerPreference) findPreference(QS_PANEL_COLOR);
-        int intColor = Settings.System.getIntForUser(getContentResolver(),
+        int intColor = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_PANEL_BG_COLOR, DEFAULT_QS_PANEL_COLOR, UserHandle.USER_CURRENT);
         String hexColor = String.format("#%08x", (0xffffffff & intColor));
         mQsPanelColor.setSummary(hexColor);
         mQsPanelColor.setNewPreviewColor(intColor);
+        mQsPanelColor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                if (preference == mQsPanelColor) {
@@ -270,7 +271,7 @@ public class Themes extends PreferenceFragment {
                           Integer.valueOf(String.valueOf(newValue)));
                      preference.setSummary(hex);
                      int intHex = ColorPickerPreference.convertToColorInt(hex);
-                     Settings.System.putIntForUser(getContentResolver(),
+                     Settings.System.putIntForUser(getContext().getContentResolver(),
                           Settings.System.QS_PANEL_BG_COLOR, intHex, UserHandle.USER_CURRENT);
                      return true;
                  }

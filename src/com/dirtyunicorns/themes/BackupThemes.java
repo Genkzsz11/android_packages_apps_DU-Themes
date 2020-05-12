@@ -202,7 +202,7 @@ public class BackupThemes extends DialogFragment {
     private void addThemeBackup() {
         mThemeDatabase.addThemeDbUtils(new ThemeDbUtils(mThemeName, isDarkMode(),
             getIconsAccentColor(), getThemeNightColor(), getAccentPicker(),
-            getThemeSwitch(), getAdaptiveIconShape(), getFont(), getIconsShape(),
+            getThemeSwitch(), getAdaptiveIconShape(), getIconsShape(),
             getSbIcons(), getThemeWp(), getNavbarStyle()));
     }
 
@@ -284,11 +284,6 @@ public class BackupThemes extends DialogFragment {
     private String getAdaptiveIconShape() {
         String adaptativeIconShape = mSharedPreferences.getString("adapative_icon_shape", "1");
         return adaptativeIconShape;
-    }
-
-    private String getFont() {
-        String fontType = mSharedPreferences.getString("font_picker", "1");
-        return fontType;
     }
 
     private String getSbIcons() {

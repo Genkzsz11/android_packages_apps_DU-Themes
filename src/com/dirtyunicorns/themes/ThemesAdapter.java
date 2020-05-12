@@ -54,7 +54,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Context mContext;
     private boolean mIsNightMode;
     private int mThemeNightColor;
-    private int mThemeFont;
     private String mThemeWpBackup;
     private Resources mResources;
     private List<ThemesListItem> mThemesList;
@@ -246,7 +245,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ThemesListItem themes = mThemesList.get(position);
         mIsNightMode = Boolean.parseBoolean(themes.getThemeDayOrNight());
         mThemeNightColor = Color.parseColor(themes.getThemeNightColor());
-        mThemeFont = Integer.parseInt(themes.getThemeFont());
         mThemeWpBackup = themes.getThemeWp();
         int bgQsAccent = Color.parseColor(themes.getThemeAccent());
         int qsTileBgInactive, qsTileIconInactive, qsTileIconActive;
@@ -438,85 +436,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         themeDayNightSpacer.setColorFilter(themeDayNightSpacerColor, Mode.SRC_IN);
         return themeDayNightSpacer;
-    }
-
-    private Typeface getTypeface() {
-        Typeface fontType = null;
-        switch (mThemeFont) {
-            case 1:
-                fontType = Typeface.create(Typeface.DEFAULT, 400, false);
-                break;
-            case 2:
-                fontType = Typeface.create(Typeface.SERIF, 400, false);
-                break;
-            case 3:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Aclonica.ttf");
-                break;
-            case 4:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Amarante.ttf");
-                break;
-            case 5:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Lato.ttf");
-                break;
-            case 6:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Bariol.ttf");
-                break;
-            case 7:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Cagliostro.ttf");
-                break;
-            case 8:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/CircularStd.ttf");
-                break;
-            case 9:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/ComicSans.ttf");
-                break;
-            case 10:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Comfortaa.ttf");
-                break;
-            case 11:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Coolstory.ttf");
-                break;
-            case 12:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Exotwo.ttf");
-                break;
-            case 13:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/FiraSans.ttf");
-                break;
-            case 14:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/GoogleSans.ttf");
-                break;
-            case 15:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/LGSmartGothic.ttf");
-                break;
-            case 16:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Rosemary.ttf");
-                break;
-            case 17:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Rubik.ttf");
-                break;
-            case 18:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/SamsungOne.ttf");
-                break;
-            case 19:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/SFProDisplay.ttf");
-                break;
-            case 20:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/SlateForOnePlus.ttf");
-                break;
-            case 21:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/SonySketch.ttf");
-                break;
-            case 22:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Storopia.ttf");
-                break;
-            case 23:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Surfer.ttf");
-                break;
-            case 24:
-                fontType = Typeface.createFromAsset(mResources.getAssets(), "fonts/Ubuntu.ttf");
-                break;
-        }
-        return fontType;
     }
 
     private ShapeDrawable getShapeDrawable(String path, int color) {

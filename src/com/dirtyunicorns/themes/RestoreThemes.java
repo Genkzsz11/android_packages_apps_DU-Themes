@@ -61,7 +61,7 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
     public static final String TAG_RESTORE_THEMES = "restore_themes";
 
     private ArrayList<String> mSwitchList;
-    private int mNumSwitches = 7;
+    private int mNumSwitches = 6;
     private int mSwitchId;
     private LinearLayoutManager mLayoutManager;
     private List<ThemesListItem> mThemesList;
@@ -78,7 +78,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
     private Switch[] mSwitchArray;
     private Switch mThemeSwitch;
     private Switch mAccentSwitch;
-    private Switch mFontSwitch;
     private Switch mIconShapeSwitch;
     private Switch mSbIconSwitch;
     private Switch mNavbarSwitch;
@@ -100,8 +99,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
         mThemeSwitch.setOnCheckedChangeListener(this);
         mAccentSwitch = (Switch) findViewById(R.id.accentSwitch);
         mAccentSwitch.setOnCheckedChangeListener(this);
-        mFontSwitch = (Switch) findViewById(R.id.fontSwitch);
-        mFontSwitch.setOnCheckedChangeListener(this);
         mIconShapeSwitch = (Switch) findViewById(R.id.iconShapeSwitch);
         mIconShapeSwitch.setOnCheckedChangeListener(this);
         mSbIconSwitch = (Switch) findViewById(R.id.sbIconSwitch);
@@ -197,25 +194,21 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
                 mSwitchId = 1;
                 mSwitchArray[1] = mAccentSwitch;
                 break;
-            case R.id.fontSwitch:
-                mSwitchId = 2;
-                mSwitchArray[2] = mFontSwitch;
-                break;
             case R.id.iconShapeSwitch:
-                mSwitchId = 3;
-                mSwitchArray[3] = mIconShapeSwitch;
+                mSwitchId = 2;
+                mSwitchArray[2] = mIconShapeSwitch;
                 break;
             case R.id.sbIconSwitch:
-                mSwitchId = 4;
-                mSwitchArray[4] = mSbIconSwitch;
+                mSwitchId = 3;
+                mSwitchArray[3] = mSbIconSwitch;
                 break;
             case R.id.navbarSwitch:
-                mSwitchId = 5;
-                mSwitchArray[5] = mNavbarSwitch;
+                mSwitchId = 4;
+                mSwitchArray[4] = mNavbarSwitch;
                 break;
             case R.id.wpSwitch:
-                mSwitchId = 6;
-                mSwitchArray[6] = mWpSwitch;
+                mSwitchId = 5;
+                mSwitchArray[5] = mWpSwitch;
                 break;
         }
         mSharedPrefEditor.putBoolean("switch" + String.valueOf(mSwitchId + 1),
@@ -247,16 +240,14 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
                 mSwitchList.get(0), mThemeSwitch.isChecked()));
             mAccentSwitch.setChecked(mSharedPreferences.getBoolean(
                 mSwitchList.get(1), mAccentSwitch.isChecked()));
-            mFontSwitch.setChecked(mSharedPreferences.getBoolean(
-                mSwitchList.get(2), mFontSwitch.isChecked()));
             mIconShapeSwitch.setChecked(mSharedPreferences.getBoolean(
-                mSwitchList.get(3), mIconShapeSwitch.isChecked()));
+                mSwitchList.get(2), mIconShapeSwitch.isChecked()));
             mSbIconSwitch.setChecked(mSharedPreferences.getBoolean(
-                mSwitchList.get(4), mSbIconSwitch.isChecked()));
+                mSwitchList.get(3), mSbIconSwitch.isChecked()));
             mNavbarSwitch.setChecked(mSharedPreferences.getBoolean(
-                mSwitchList.get(5), mNavbarSwitch.isChecked()));
+                mSwitchList.get(4), mNavbarSwitch.isChecked()));
             mWpSwitch.setChecked(mSharedPreferences.getBoolean(
-                mSwitchList.get(6), mWpSwitch.isChecked()));
+                mSwitchList.get(5), mWpSwitch.isChecked()));
         } else {
             for (int i = 0; i < mNumSwitches; i++) {
                 mSharedPrefEditor.remove(mSwitchList.get(i));
@@ -264,7 +255,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
             mSharedPrefEditor.apply();
             mThemeSwitch.setChecked(mThemeSwitch.isChecked());
             mAccentSwitch.setChecked(mAccentSwitch.isChecked());
-            mFontSwitch.setChecked(mFontSwitch.isChecked());
             mIconShapeSwitch.setChecked(mIconShapeSwitch.isChecked());
             mSbIconSwitch.setChecked(mSbIconSwitch.isChecked());
             mNavbarSwitch.setChecked(mNavbarSwitch.isChecked());
@@ -318,7 +308,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
 
     private void applyThemeBackup() {
         applyThemeSwitch();
-        applyThemeFont();
         applyThemeIconShape();
         applyThemeSbIcons();
         applyThemeAccent();
@@ -330,14 +319,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
         if (mThemeSwitch.isChecked()) {
             String newValue = mThemesList.get(getCurrentItem()).getThemeSwitch();
             mSharedPrefEditor.putString("theme_switch", newValue);
-            mSharedPrefEditor.apply();
-        }
-    }
-
-    private void applyThemeFont() {
-        if (mFontSwitch.isChecked()) {
-            String newValue = mThemesList.get(getCurrentItem()).getThemeFont();
-            mSharedPrefEditor.putString("font_picker", newValue);
             mSharedPrefEditor.apply();
         }
     }
@@ -411,15 +392,14 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
             String accentPicker = themes.getAccentPicker();
             String themeSwitch = themes.getThemeSwitch();
             String adaptativeIconShape = themes.getAdaptiveIconShape();
-            String themeFont = themes.getThemeFont();
             String themeIconShape = themes.getThemeIconShape();
             String themeSbIcons = themes.getThemeSbIcons();
             String themeWp = themes.getThemeWp();
             String themeNavbarStyle = themes.getThemeNavbarStyle();
             mThemesList.add(new ThemesListItem(themeName, themeDayOrNight,
                     themeAccent, themeNightColor, accentPicker, themeSwitch,
-                    adaptativeIconShape, themeFont, themeIconShape, themeSbIcons,
-                    themeWp, themeNavbarStyle));
+                    adaptativeIconShape, themeIconShape, themeSbIcons, themeWp,
+                    themeNavbarStyle));
         }
         mThemesAdapter.notifyDataSetChanged();
         assert mThemesList != null;
@@ -468,7 +448,6 @@ public class RestoreThemes extends Activity implements CompoundButton.OnCheckedC
                         mThemesList.get(getCurrentItem()).getAccentPicker(),
                         mThemesList.get(getCurrentItem()).getThemeSwitch(),
                         mThemesList.get(getCurrentItem()).getAdaptiveIconShape(),
-                        mThemesList.get(getCurrentItem()).getThemeFont(),
                         mThemesList.get(getCurrentItem()).getThemeIconShape(),
                         mThemesList.get(getCurrentItem()).getThemeSbIcons(),
                         mThemesList.get(getCurrentItem()).getThemeWp(),

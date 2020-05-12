@@ -40,7 +40,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
     private static final String KEY_ACCENT_PICKER = "accentPicker";
     private static final String KEY_THEME_SWITCH = "themeSwitch";
     private static final String KEY_ADAPTATIVE_ICON_SHAPE = "adaptativeIconShape";
-    private static final String KEY_THEME_FONT = "themeFont";
     private static final String KEY_THEME_ICON_SHAPE = "themeIconShape";
     private static final String KEY_THEME_SB_ICONS = "themeSbIcons";
     private static final String KEY_THEME_WP = "themeWp";
@@ -57,9 +56,8 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 + KEY_THEME_DAY_NIGHT + " TEXT," + KEY_THEME_ACCENT + " TEXT,"
                 + KEY_THEME_NIGHT_COLOR + " TEXT," + KEY_ACCENT_PICKER + " TEXT,"
                 + KEY_THEME_SWITCH + " TEXT," + KEY_ADAPTATIVE_ICON_SHAPE + " TEXT,"
-                + KEY_THEME_FONT + " TEXT," + KEY_THEME_ICON_SHAPE + " TEXT,"
-                + KEY_THEME_SB_ICONS + " TEXT," + KEY_THEME_WP + " TEXT,"
-                + KEY_THEME_NAVBAR_STYLE + " TEXT" + ")";
+                + KEY_THEME_ICON_SHAPE + " TEXT," + KEY_THEME_SB_ICONS + " TEXT,"
+                + KEY_THEME_WP + " TEXT," + KEY_THEME_NAVBAR_STYLE + " TEXT" + ")";
         db.execSQL(CREATE_THEME_TABLE);
     }
 
@@ -80,7 +78,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         values.put(KEY_ACCENT_PICKER, themeDbUtils.getAccentPicker());
         values.put(KEY_THEME_SWITCH, themeDbUtils.getThemeSwitch());
         values.put(KEY_ADAPTATIVE_ICON_SHAPE, themeDbUtils.getAdaptiveIconShape());
-        values.put(KEY_THEME_FONT, themeDbUtils.getThemeFont());
         values.put(KEY_THEME_ICON_SHAPE, themeDbUtils.getThemeIconShape());
         values.put(KEY_THEME_SB_ICONS, themeDbUtils.getThemeSbIcons());
         values.put(KEY_THEME_WP, themeDbUtils.getThemeWp());
@@ -96,7 +93,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         Cursor cursor = db.query(THEME_TABLE, new String[] {KEY_ID, KEY_THEME_NAME,
                         KEY_THEME_DAY_NIGHT, KEY_THEME_ACCENT, KEY_THEME_NIGHT_COLOR,
                         KEY_ACCENT_PICKER, KEY_THEME_SWITCH, KEY_ADAPTATIVE_ICON_SHAPE,
-                        KEY_THEME_FONT, KEY_THEME_ICON_SHAPE, KEY_THEME_SB_ICONS,
+                        KEY_THEME_ICON_SHAPE, KEY_THEME_SB_ICONS,
                         KEY_THEME_WP, KEY_THEME_NAVBAR_STYLE}, KEY_THEME_NAME + " = ?",
                         new String[] {str}, null, null, null, null);
         if (cursor != null) {
@@ -110,7 +107,7 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 cursor.getString(5), cursor.getString(6),
                 cursor.getString(7), cursor.getString(8),
                 cursor.getString(9), cursor.getString(10),
-                cursor.getString(11), cursor.getString(12));
+                cursor.getString(11));
         cursor.close();
 
         return themeDbUtils;
@@ -134,11 +131,10 @@ public class ThemeDatabase extends SQLiteOpenHelper {
                 themeDbUtils.setAccentPicker(cursor.getString(5));
                 themeDbUtils.setThemeSwitch(cursor.getString(6));
                 themeDbUtils.setAdaptiveIconShape(cursor.getString(7));
-                themeDbUtils.setThemeFont(cursor.getString(8));
-                themeDbUtils.setThemeIconShape(cursor.getString(9));
-                themeDbUtils.setThemeSbIcons(cursor.getString(10));
-                themeDbUtils.setThemeWp(cursor.getString(11));
-                themeDbUtils.setThemeNavbarStyle(cursor.getString(12));
+                themeDbUtils.setThemeIconShape(cursor.getString(8));
+                themeDbUtils.setThemeSbIcons(cursor.getString(9));
+                themeDbUtils.setThemeWp(cursor.getString(10));
+                themeDbUtils.setThemeNavbarStyle(cursor.getString(11));
                 themeDbUtilsList.add(themeDbUtils);
             } while (cursor.moveToNext());
         }
@@ -158,7 +154,6 @@ public class ThemeDatabase extends SQLiteOpenHelper {
         values.put(KEY_ACCENT_PICKER, themeDbUtils.getAccentPicker());
         values.put(KEY_THEME_SWITCH, themeDbUtils.getThemeSwitch());
         values.put(KEY_ADAPTATIVE_ICON_SHAPE, themeDbUtils.getAdaptiveIconShape());
-        values.put(KEY_THEME_FONT, themeDbUtils.getThemeFont());
         values.put(KEY_THEME_ICON_SHAPE, themeDbUtils.getThemeIconShape());
         values.put(KEY_THEME_SB_ICONS, themeDbUtils.getThemeSbIcons());
         values.put(KEY_THEME_WP, themeDbUtils.getThemeWp());

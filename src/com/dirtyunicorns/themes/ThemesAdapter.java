@@ -292,7 +292,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     viewHolderMain.mViewNavbarMain.setVisibility(View.GONE);
                 }
                 viewHolderMain.mThemeMainName.setText(themeName);
-                viewHolderMain.mThemeMainName.setTypeface(getTypeface());
                 break;
             case 2:
                 ViewHolderFilled viewHolderFilled = (ViewHolderFilled) holder;
@@ -325,7 +324,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     viewHolderFilled.mViewNavbarMainFilled.setVisibility(View.GONE);
                 }
                 viewHolderFilled.mThemeMainFilledName.setText(themeName);
-                viewHolderFilled.mThemeMainFilledName.setTypeface(getTypeface());
                 break;
             case 3:
                 ViewHolderRounded viewHolderRounded = (ViewHolderRounded) holder;
@@ -358,7 +356,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     viewHolderRounded.mViewNavbarMainRounded.setVisibility(View.GONE);
                 }
                 viewHolderRounded.mThemeMainRoundedName.setText(themeName);
-                viewHolderRounded.mThemeMainRoundedName.setTypeface(getTypeface());
                 break;
             case 4:
                 ViewHolderCircular viewHolderCircular = (ViewHolderCircular) holder;
@@ -391,7 +388,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     viewHolderCircular.mViewNavbarMainCircular.setVisibility(View.GONE);
                 }
                 viewHolderCircular.mThemeMainCircularName.setText(themeName);
-                viewHolderCircular.mThemeMainCircularName.setTypeface(getTypeface());
                 break;
         }
     }

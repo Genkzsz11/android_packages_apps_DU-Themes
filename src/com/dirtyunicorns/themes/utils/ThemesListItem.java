@@ -25,7 +25,6 @@ public class ThemesListItem {
     private String mAccentPicker;
     private String mThemeSwitch;
     private String mAdaptativeIconShape;
-    private String mThemeFont;
     private String mThemeIconShape;
     private String mThemeSbIcons;
     private String mThemeWp;
@@ -36,8 +35,8 @@ public class ThemesListItem {
     }
 
     public ThemesListItem(String themeName, String themeDayOrNight, String themeAccent, String themeNightColor,
-                String accentPicker, String themeSwitch, String adaptativeIconShape, String themeFont,
-                String themeIconShape, String themeSbIcons, String themeWp, String themeNavbarStyle) {
+                String accentPicker, String themeSwitch, String adaptativeIconShape, String themeIconShape,
+                String themeSbIcons, String themeWp, String themeNavbarStyle) {
         mThemeName = themeName;
         mThemeDayOrNight = themeDayOrNight;
         mThemeAccent = themeAccent;
@@ -45,7 +44,6 @@ public class ThemesListItem {
         mAccentPicker = accentPicker;
         mThemeSwitch = themeSwitch;
         mAdaptativeIconShape = adaptativeIconShape;
-        mThemeFont = themeFont;
         mThemeIconShape = themeIconShape;
         mThemeSbIcons = themeSbIcons;
         mThemeWp = themeWp;
@@ -106,14 +104,6 @@ public class ThemesListItem {
 
     public void setAdaptiveIconShape(String adaptativeIconShape) {
         mAdaptativeIconShape = adaptativeIconShape;
-    }
-
-    public String getThemeFont() {
-        return mThemeFont;
-    }
-
-    public void setThemeFont(String themeFont) {
-        mThemeFont = themeFont;
     }
 
     public String getThemeIconShape() {

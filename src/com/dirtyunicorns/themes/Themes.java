@@ -77,7 +77,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
     public static final String PREF_THEME_NAVBAR_STYLE = "theme_navbar_style";
     public static final String PREF_THEME_ACCENT_COLOR = "theme_accent_color";
     public static final String PREF_ADAPTIVE_ICON_SHAPE = "adapative_icon_shape";
-    public static final String PREF_FONT_PICKER = "font_picker";
     public static final String PREF_STATUSBAR_ICONS = "statusbar_icons";
     public static final String PREF_THEME_SWITCH = "theme_switch";
 
@@ -93,7 +92,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
     private UiModeManager mUiModeManager;
 
     private ListPreference mAdaptiveIconShape;
-    private ListPreference mFontPicker;
     private ListPreference mStatusbarIcons;
     private ListPreference mThemeSwitch;
     private ListPreference mQsHeaderStyle;
@@ -281,16 +279,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
         }
         mThemeSwitch.setSummary(mThemeSwitch.getEntry());
 
-        // Font picker
-        mFontPicker = (ListPreference) findPreference(PREF_FONT_PICKER);
-        int fontPickerValue = getOverlayPosition(ThemesUtils.FONTS);
-        if (fontPickerValue != -1) {
-            mFontPicker.setValue(String.valueOf(fontPickerValue + 2));
-        } else {
-            mFontPicker.setValue("1");
-        }
-        mFontPicker.setSummary(mFontPicker.getEntry());
-
         // Adaptive icon shape
         mAdaptiveIconShape = (ListPreference) findPreference(PREF_ADAPTIVE_ICON_SHAPE);
         int iconShapeValue = getOverlayPosition(ThemesUtils.ADAPTIVE_ICON_SHAPE);
@@ -383,31 +371,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
     public OnSharedPreferenceChangeListener mSharedPrefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
-            class FontPicker extends AsyncTask<Void, Void, Void> {
-
-                protected Void doInBackground(Void... param) {
-                    return null;
-                }
-
-                protected void onPostExecute(Void param) {
-                }
-
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    String fontType = sharedPreferences.getString(PREF_FONT_PICKER, "1");
-                    String overlayName = getOverlayName(ThemesUtils.FONTS);
-                    int fontTypeValue = Integer.parseInt(fontType);
-                    if (overlayName != null) {
-                        handleOverlays(overlayName, false, mOverlayManager);
-                    }
-                    if (fontTypeValue > 1) {
-                        handleOverlays(ThemesUtils.FONTS[fontTypeValue - 2],
-                                true, mOverlayManager);
-                    }
-                    mFontPicker.setSummary(mFontPicker.getEntry());
-                }
-            }
 
             if (key.equals(PREF_THEME_ACCENT_COLOR)) {
                 String accentColor = sharedPreferences.getString(PREF_THEME_ACCENT_COLOR, "default");
@@ -431,10 +394,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
                     handleOverlays(navbarStyle, true, mOverlayManager);
                 }
                 updateNavbarSummary();
-            }
-
-            if (key.equals(PREF_FONT_PICKER)) {
-                new FontPicker().execute();
             }
 
             if (key.equals(PREF_ADAPTIVE_ICON_SHAPE)) {
@@ -673,8 +632,6 @@ public class Themes extends PreferenceFragment implements ThemesListener {
             .remove(PREF_THEME_ACCENT_COLOR)
             // NavBar
             .remove(PREF_THEME_NAVBAR_STYLE)
-            // Fonts
-            .remove(PREF_FONT_PICKER)
             // Adapative icons
             .remove(PREF_ADAPTIVE_ICON_SHAPE)
             // Statusbar icons

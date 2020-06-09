@@ -73,6 +73,16 @@
     <string name="adaptive_icon_shape_roundedrect">Rounded Rectangle</string>
     <string name="adaptive_icon_shape_cylinder">Cylinder</string>
     <string name="adaptive_icon_shape_hexagon">Hexagon</string>
+    <string name="adaptive_icon_shape_square">Square</string>
+    <string name="adaptive_icon_shape_squircletrim">Squircle with trim</string>
+    <string name="adaptive_icon_shape_teardrop">Teardrop</string>
+    <string name="adaptive_icon_shape_diamond">Diamond</string>
+    <string name="adaptive_icon_shape_star">Star</string>
+    <string name="adaptive_icon_shape_gear">Gear</string>
+    <string name="adaptive_icon_shape_badge">Badge</string>
+    <string name="adaptive_icon_shape_badgetwo">Badge two</string>
+    <string name="adaptive_icon_shape_circletrim">Circle with trim</string>
+    <string name="adaptive_icon_shape_dualtonecircletrim">Dual-toned circle</string>
     <string name="adaptive_icon_shape_title">Icon shape</string>
     <string name="adaptive_icon_shape_dialog_title">Select icon shape</string>
 

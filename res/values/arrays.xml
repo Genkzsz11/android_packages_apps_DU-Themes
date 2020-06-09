@@ -78,6 +78,16 @@
         <item>@string/adaptive_icon_shape_roundedrect</item>
         <item>@string/adaptive_icon_shape_cylinder</item>
         <item>@string/adaptive_icon_shape_hexagon</item>
+        <item>@string/adaptive_icon_shape_square</item>
+        <item>@string/adaptive_icon_shape_squircletrim</item>
+        <item>@string/adaptive_icon_shape_teardrop</item>
+        <item>@string/adaptive_icon_shape_diamond</item>
+        <item>@string/adaptive_icon_shape_star</item>
+        <item>@string/adaptive_icon_shape_gear</item>
+        <item>@string/adaptive_icon_shape_badge</item>
+        <item>@string/adaptive_icon_shape_badgetwo</item>
+        <item>@string/adaptive_icon_shape_circletrim</item>
+        <item>@string/adaptive_icon_shape_dualtonecircletrim</item>
     </string-array>
 
     <string-array name="adapative_icon_shape_values">
@@ -87,6 +97,16 @@
         <item>4</item>
         <item>5</item>
         <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
     </string-array>
 
     <!-- Statusbar icons -->
